@@ -663,6 +663,7 @@ function Promise(descriptor, fallback, inspect) {
                 result = fallback.call(promise, op, args);
             }
         } catch (exception) {
+            console.error("qSwallowedException: %j", exception.stack);
             result = reject(exception);
         }
         if (resolve) {
