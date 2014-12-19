@@ -106,6 +106,7 @@ var nextTick =(function () {
                 task();
 
             } catch (e) {
+                console.error("qSwallowedException: %j", exception.stack);
                 if (isNodeJS) {
                     // In node, uncaught exceptions are considered fatal errors.
                     // Re-throw them synchronously to interrupt flushing!
@@ -703,6 +704,7 @@ Promise.prototype.then = function (fulfilled, rejected, progressed) {
         try {
             return typeof fulfilled === "function" ? fulfilled(value) : value;
         } catch (exception) {
+            console.error("qSwallowedException: %j", exception.stack);
             return reject(exception);
         }
     }
@@ -713,6 +715,7 @@ Promise.prototype.then = function (fulfilled, rejected, progressed) {
             try {
                 return rejected(exception);
             } catch (newException) {
+                console.error("qSwallowedException: %j", exception.stack);
                 return reject(newException);
             }
         }
@@ -748,6 +751,7 @@ Promise.prototype.then = function (fulfilled, rejected, progressed) {
         try {
             newValue = _progressed(value);
         } catch (e) {
+            console.error("qSwallowedException: %j", exception.stack);
             threw = true;
             if (Q.onerror) {
                 Q.onerror(e);
@@ -1063,6 +1067,7 @@ function coerce(promise) {
         try {
             promise.then(deferred.resolve, deferred.reject, deferred.notify);
         } catch (exception) {
+            console.error("qSwallowedException: %j", exception.stack);
             deferred.reject(exception);
         }
     });
@@ -1166,6 +1171,7 @@ function async(makeGenerator) {
                 try {
                     result = generator[verb](arg);
                 } catch (exception) {
+                    console.error("qSwallowedException: %j", exception.stack);
                     return reject(exception);
                 }
                 if (result.done) {
@@ -1178,6 +1184,7 @@ function async(makeGenerator) {
                 try {
                     result = generator[verb](arg);
                 } catch (exception) {
+                    console.error("qSwallowedException: %j", exception.stack);
                     if (isStopIteration(exception)) {
                         return exception.value;
                     } else {
